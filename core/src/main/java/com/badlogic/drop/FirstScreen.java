@@ -1,9 +1,17 @@
 package com.badlogic.drop;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
+    private SpriteBatch batch;
+    private FitViewport viewport;
+
+    Texture BG = new Texture("gameAssets/TitleScreen.png");
+
     @Override
     public void show() {
         // Prepare your screen here.
@@ -12,6 +20,7 @@ public class FirstScreen implements Screen {
     @Override
     public void render(float delta) {
         // Draw your screen here. "delta" is the time since last render in seconds.
+        batch.draw(BG);
     }
 
     @Override
@@ -21,6 +30,7 @@ public class FirstScreen implements Screen {
         if(width <= 0 || height <= 0) return;
 
         // Resize your screen here. The parameters represent the new window size.
+        viewport = new FitViewport(80, 50);
     }
 
     @Override
