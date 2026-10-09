@@ -4,16 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
+
 
 /** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
@@ -26,7 +22,8 @@ public class FirstScreen implements Screen {
 
     TextField textField;
 
-    Button playButton;
+    Texture sliderTexture;
+    SimpleSlider sliderSlider;
 
     @Override
     public void show() {
@@ -45,7 +42,13 @@ public class FirstScreen implements Screen {
         playSprite.setCenter(40, 15);
         playSprite.setBounds();
 
+        sliderTexture = new Texture("gameAssets/southern_comfort-2374724973.png");
+        sliderSlider = new SimpleSlider(sliderTexture);
 
+        sliderSlider.setCenter(25,25);
+        sliderSlider.setSize(7,5);
+        sliderSlider.setBounds();
+        sliderSlider.setBG();
 
     }
 
@@ -74,6 +77,9 @@ public class FirstScreen implements Screen {
         playSprite.setCenter(40, 15);
         playSprite.draw(batch);
 
+        sliderSlider.setCenter(25, 25);
+        sliderSlider.draw(batch);
+        sliderSlider.drawBG(batch);
 
         batch.end();
     }

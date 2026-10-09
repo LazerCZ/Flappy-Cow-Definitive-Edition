@@ -1,6 +1,7 @@
 package com.badlogic.drop;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,6 +16,15 @@ public class SimpleSlider extends SimpleButton {
         this.BG = new Sprite(bgText);
         this.BG.setSize(this.getScaleX() * 3, this.getScaleY() / 2);
         this.BG.setPosition(this.getX(), this.getY() - (this.getHeight() / 2));
+    }
+
+    public void setBG(){
+        this.BG.setSize(this.getScaleX() * 3, this.getScaleY() / 2);
+        this.BG.setPosition(this.getX(), this.getY() - (this.getHeight() / 2));
+    }
+
+    public void drawBG(Batch batch){
+        BG.draw(batch);
     }
 
     public void slideSlider(Vector2 mousePos){
