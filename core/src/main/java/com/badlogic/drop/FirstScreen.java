@@ -1,27 +1,96 @@
 package com.badlogic.drop;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.sun.org.apache.xerces.internal.util.SynchronizedSymbolTable;
 
 /** First screen of the application. Displayed after the application is created. */
 public class FirstScreen implements Screen {
-    private SpriteBatch batch;
+    SpriteBatch batch;
     private FitViewport viewport;
 
     Texture BG = new Texture("gameAssets/TitleScreen.png");
+    Texture playTexture;
+    SimpleButton playSprite;
+
+    TextField textField;
+
+    Button playButton;
 
     @Override
     public void show() {
         // Prepare your screen here.
+
+        batch = new SpriteBatch();
+
+        float worldWidth = 80;
+        float worldHeight = 50;
+
+        playTexture = new Texture("gameAssets/Play Button.png");
+        playSprite = new SimpleButton(playTexture);
+
+
+        playSprite.setSize(25, 15);
+        playSprite.setCenter(40, 15);
+        playSprite.setBounds();
+
+
+
     }
 
     @Override
     public void render(float delta) {
         // Draw your screen here. "delta" is the time since last render in seconds.
-        batch.draw(BG);
+        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        draw(delta);
+        logic(delta);
+        input(delta);
     }
+
+    public void draw(float delta){
+        ScreenUtils.clear(Color.BLACK);
+        viewport.apply();
+        batch.setProjectionMatrix(viewport.getCamera().combined);
+        batch.begin();
+
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+
+
+        batch.draw(BG,0, 0, worldWidth, worldHeight);
+
+
+        playSprite.setCenter(40, 15);
+        playSprite.draw(batch);
+
+
+        batch.end();
+    }
+    public void logic(float delta){
+        Vector2 mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        Vector2 mpUnconvert = viewport.unproject(mousePos);
+        if (playSprite.touchingMouse(mpUnconvert)){
+            playSprite.setSize(30, 18);
+        }
+        else {
+            playSprite.setSize(25, 15);
+        }
+    }
+    public void input(float delta){
+
+    }
+
 
     @Override
     public void resize(int width, int height) {
@@ -31,6 +100,7 @@ public class FirstScreen implements Screen {
 
         // Resize your screen here. The parameters represent the new window size.
         viewport = new FitViewport(80, 50);
+        viewport.update(width, height, true);
     }
 
     @Override
