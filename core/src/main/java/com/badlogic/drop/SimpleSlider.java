@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 public class SimpleSlider extends SimpleButton {
     private int value;
     private Texture bgText;
-    private Sprite BG;
+    public Sprite BG;
 
     public SimpleSlider(Texture asset){
         super(asset);
@@ -19,13 +19,10 @@ public class SimpleSlider extends SimpleButton {
     }
 
     public void setBG(){
-        this.BG.setSize(this.getScaleX() * 3, this.getScaleY() / 2);
-        this.BG.setPosition(this.getX(), this.getY() - (this.getHeight() / 2));
+        this.BG.setSize(this.getWidth() * 3, this.getHeight() / 2);
+        this.BG.setPosition(this.getButtonPos().x, getButtonPos().y + (this.getHeight() / 4));
     }
 
-    public void drawBG(Batch batch){
-        BG.draw(batch);
-    }
 
     public void slideSlider(Vector2 mousePos){
         this.setX(mousePos.x);

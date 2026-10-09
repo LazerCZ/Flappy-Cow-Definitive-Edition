@@ -45,8 +45,9 @@ public class FirstScreen implements Screen {
         sliderTexture = new Texture("gameAssets/southern_comfort-2374724973.png");
         sliderSlider = new SimpleSlider(sliderTexture);
 
-        sliderSlider.setCenter(25,25);
         sliderSlider.setSize(7,5);
+        sliderSlider.setCenter(25,25);
+
         sliderSlider.setBounds();
         sliderSlider.setBG();
 
@@ -77,9 +78,9 @@ public class FirstScreen implements Screen {
         playSprite.setCenter(40, 15);
         playSprite.draw(batch);
 
-        sliderSlider.setCenter(25, 25);
         sliderSlider.draw(batch);
-        sliderSlider.drawBG(batch);
+        sliderSlider.setBG();
+        sliderSlider.BG.draw(batch);
 
         batch.end();
     }
