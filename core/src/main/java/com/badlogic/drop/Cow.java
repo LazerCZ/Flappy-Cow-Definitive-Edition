@@ -1,3 +1,5 @@
+package com.badlogic.drop;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,11 +10,13 @@ public class Cow extends Sprite {
     private double speed;
     private double jumpPower;
     private double gravity;
+    private double gravMod;
 
-    public Cow(Texture asset, double baseSpeed, double JP){
+    public Cow(Texture asset, double baseSpeed, double JP, double gravMod){
         super(asset);
         this.speed = baseSpeed;
         this.jumpPower = JP;
+        this.gravMod = gravMod;
     }
 
     public double getSpeed(){
@@ -50,5 +54,10 @@ public class Cow extends Sprite {
     public void makeSound(){
         Sound moo = Gdx.audio.newSound(Gdx.files.internal("gameAssets/cow3.mp3"));
         moo.play();
+    }
+    public void updatePos(){
+        translateY((float) gravity);
+
+        gravity--;
     }
 }

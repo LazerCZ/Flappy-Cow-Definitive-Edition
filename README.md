@@ -1,4 +1,4 @@
-# Flappy Cow Defenitive Edition
+# Flappy com.badlogic.drop.Cow Defenitive Edition
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 

@@ -15,6 +15,10 @@ public class GameScreen implements Screen {
 
     Texture BG;
 
+
+    Texture cowText;
+    Cow cow;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -23,6 +27,10 @@ public class GameScreen implements Screen {
         float worldHeight = 50;
 
         BG = new Texture("gameAssets/4622732.png");
+
+        cowText = new Texture("gameAssets/Untitled Drawing.png");
+        cow = new Cow(cowText, 6.0, 20, 5);
+
     }
 
     @Override
