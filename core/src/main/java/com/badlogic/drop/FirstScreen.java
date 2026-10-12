@@ -25,6 +25,12 @@ public class FirstScreen implements Screen {
     Texture sliderTexture;
     SimpleSlider sliderSlider;
 
+    Texture modeTexture;
+    SimpleButton modeButton;
+
+    float volume;
+    int mode;
+
     @Override
     public void show() {
         // Prepare your screen here.
@@ -34,19 +40,24 @@ public class FirstScreen implements Screen {
         float worldWidth = 80;
         float worldHeight = 50;
 
+        volume = 0.0f;
+
+        mode = 1;
+
         playTexture = new Texture("gameAssets/Play Button.png");
         playSprite = new SimpleButton(playTexture);
-
 
         playSprite.setSize(25, 15);
         playSprite.setCenter(40, 15);
         playSprite.setBounds();
 
+
+
         sliderTexture = new Texture("gameAssets/southern_comfort-2374724973.png");
         sliderSlider = new SimpleSlider(sliderTexture);
 
         sliderSlider.setSize(7,5);
-        sliderSlider.setCenter(25,25);
+        sliderSlider.setCenter(10,25);
 
         sliderSlider.setBounds();
         sliderSlider.setBG();
@@ -78,9 +89,9 @@ public class FirstScreen implements Screen {
         playSprite.setCenter(40, 15);
         playSprite.draw(batch);
 
-        sliderSlider.draw(batch);
-        sliderSlider.setBG();
         sliderSlider.BG.draw(batch);
+        sliderSlider.draw(batch);
+
 
         batch.end();
     }
@@ -95,7 +106,13 @@ public class FirstScreen implements Screen {
         }
     }
     public void input(float delta){
+        Vector2 mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        Vector2 mpUnconvert = viewport.unproject(mousePos);
 
+        if (sliderSlider.isPressed(mpUnconvert)){
+            sliderSlider.slideSlider(mpUnconvert);
+            volume = (float) sliderSlider.getValue() / 100;
+        }
     }
 
 

@@ -34,4 +34,8 @@ public class SimpleButton extends Sprite {
     public Vector2 getButtonPos(){
         return buttonPos;
     }
+    public Vector2 getButtonPos2(){
+        return buttonPos2;
+    }
+
 }
