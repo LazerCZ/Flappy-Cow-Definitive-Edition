@@ -31,6 +31,12 @@ public class SimpleButton extends Sprite {
         }
         return false;
     }
+    public boolean isJustPressed(Vector2 mousePos){
+        if (mousePos.x > buttonPos.x && mousePos.x < buttonPos2.x && mousePos.y > buttonPos.y && mousePos.y < buttonPos2.y){
+            return Gdx.input.isButtonJustPressed(Input.Buttons.LEFT);
+        }
+        return false;
+    }
     public Vector2 getButtonPos(){
         return buttonPos;
     }

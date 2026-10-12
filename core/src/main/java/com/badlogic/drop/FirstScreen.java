@@ -31,6 +31,8 @@ public class FirstScreen implements Screen {
     float volume;
     int mode;
 
+    boolean switchScreen;
+
     @Override
     public void show() {
         // Prepare your screen here.
@@ -40,9 +42,11 @@ public class FirstScreen implements Screen {
         float worldWidth = 80;
         float worldHeight = 50;
 
+        switchScreen = false;
+
         volume = 0.0f;
 
-        mode = 1;
+        mode = 0;
 
         playTexture = new Texture("gameAssets/Play Button.png");
         playSprite = new SimpleButton(playTexture);
@@ -51,13 +55,19 @@ public class FirstScreen implements Screen {
         playSprite.setCenter(40, 15);
         playSprite.setBounds();
 
+        modeTexture = new Texture("gameAssets/ClassicMode.png");
+        modeButton = new SimpleButton(modeTexture);
 
+        modeButton.setSize(20, 15);
+        modeButton.setCenter(70, 15);
+        modeButton.setBounds();
 
         sliderTexture = new Texture("gameAssets/southern_comfort-2374724973.png");
         sliderSlider = new SimpleSlider(sliderTexture);
 
         sliderSlider.setSize(7,5);
         sliderSlider.setCenter(10,25);
+
 
         sliderSlider.setBounds();
         sliderSlider.setBG();
@@ -92,6 +102,9 @@ public class FirstScreen implements Screen {
         sliderSlider.BG.draw(batch);
         sliderSlider.draw(batch);
 
+        modeButton.setCenter(70, 15);
+        modeButton.draw(batch);
+
 
         batch.end();
     }
@@ -104,6 +117,13 @@ public class FirstScreen implements Screen {
         else {
             playSprite.setSize(25, 15);
         }
+
+        if (modeButton.touchingMouse(mpUnconvert)){
+            modeButton.setSize(25, 18);
+        }
+        else {
+            modeButton.setSize(20, 15);
+        }
     }
     public void input(float delta){
         Vector2 mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
@@ -112,6 +132,43 @@ public class FirstScreen implements Screen {
         if (sliderSlider.isPressed(mpUnconvert)){
             sliderSlider.slideSlider(mpUnconvert);
             volume = (float) sliderSlider.getValue() / 100;
+        }
+
+        if (modeButton.isJustPressed(mousePos)){
+            Texture m1 = new Texture("gameAssets/ClassicMode.png");
+            Texture m2 = new Texture("gameAssets/ChocoMode.png");
+            Texture m3 = new Texture("gameAssets/StrawMode.png");
+            Texture m4 = new Texture("gameAssets/NeaMode.png");
+
+            mode ++;
+            if (mode > 3){
+                mode = 0;
+            }
+            switch (mode){
+                case 0:
+                    modeButton.setTexture(m1);
+                    System.out.println("Classic Mode");
+                    break;
+                case 1:
+                    modeButton.setTexture(m2);
+                    System.out.println("Chocolate Mode");
+                    break;
+                case 2:
+                    modeButton.setTexture(m3);
+                    System.out.println("Strawberry Mode");
+                    break;
+                case 3:
+                    modeButton.setTexture(m4);
+                    System.out.println("Neapolitan Mode");
+                    break;
+                default:
+                    modeButton.setTexture(m1);
+                    System.out.println("Classic Mode");
+                    break;
+            }
+        }
+        if (playSprite.isJustPressed(mousePos)){
+            switchScreen = true;
         }
     }
 
