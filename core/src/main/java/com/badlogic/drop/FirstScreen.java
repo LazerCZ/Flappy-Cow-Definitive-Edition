@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -27,6 +28,9 @@ public class FirstScreen implements Screen {
 
     Texture modeTexture;
     SimpleButton modeButton;
+
+    Texture evilt;
+    Sprite evil;
 
     float volume;
     int mode;
@@ -68,9 +72,13 @@ public class FirstScreen implements Screen {
         sliderSlider.setSize(7,5);
         sliderSlider.setCenter(10,25);
 
-
         sliderSlider.setBounds();
         sliderSlider.setBG();
+
+        evilt = new Texture("gameAssets/ywah.png");
+        evil = new Sprite(evilt);
+        evil.setSize(35,25);
+        evil.setCenter(15, 6);
 
     }
 
@@ -104,6 +112,9 @@ public class FirstScreen implements Screen {
 
         modeButton.setCenter(70, 15);
         modeButton.draw(batch);
+
+        evil.setCenter((float) (15 + (1 - 2 * Math.random())), (float) (6 + (1 - 2 * Math.random())));
+        evil.draw(batch);
 
 
         batch.end();
@@ -167,7 +178,7 @@ public class FirstScreen implements Screen {
                     break;
             }
         }
-        if (playSprite.isJustPressed(mousePos)){
+        if (playSprite.isJustPressed(mousePos) && !(mode == 3)){
             switchScreen = true;
         }
     }

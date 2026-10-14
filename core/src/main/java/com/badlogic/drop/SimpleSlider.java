@@ -31,7 +31,7 @@ public class SimpleSlider extends SimpleButton {
         this.setX(mousePos.x - this.getWidth() / 2);
         this.setX(Math.clamp(this.getX(), BG.getX(), BG.getX() + BG.getWidth() - 7));
         value = Math.round(BG.getX() + (this.getX() - BG.getX())) - 7;
-        value = Math.round(value / (this.getX() -BG.getX() + BG.getWidth() - 7) * 200);
+        value = 100 - Math.round(value / (this.getX() -BG.getX() + BG.getWidth() - 7) * 200);
     }
 
     public int getValue(){

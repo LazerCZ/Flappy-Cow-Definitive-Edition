@@ -1,11 +1,17 @@
 package com.badlogic.drop;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import org.w3c.dom.Text;
 
 public class GameScreen implements Screen {
     SpriteBatch batch;
@@ -13,11 +19,26 @@ public class GameScreen implements Screen {
     public float volume;
     public int mode;
 
+    boolean notPaused;
+    boolean start;
+    boolean dead = false;
+
     Texture BG;
+    Texture pauseScreen;
 
 
     Texture cowText;
     Cow cow;
+
+    Texture bt;
+
+    Array<Milk> milks;
+    float milkTimer;
+
+    Texture bText;
+    Butcher theButcher;
+
+    Lives lifeCount;
 
     @Override
     public void show() {
@@ -29,8 +50,32 @@ public class GameScreen implements Screen {
         BG = new Texture("gameAssets/4622732.png");
 
         cowText = new Texture("gameAssets/Untitled Drawing.png");
-        cow = new Cow(cowText, 6.0, 20, 5);
+        cow = new Cow(cowText, 6.0, 1, 0.1, -2, new Rectangle());
+        cow.setSize(7,5);
+        cow.setX(15);
+        cow.setY(25);
+        cow.skin(mode);
+        cow.Hurtbox = new Rectangle(cow.getX(), cow.getY(), cow.getHeight(), cow.getWidth());
 
+        bText = new Texture("gameAssets/Untitled Drawing (2).png");
+        theButcher = new Butcher(bText, 1.3, 0.1, -2);
+        theButcher.setSize(7,5);
+        theButcher.setX(0);
+        theButcher.setY(25);
+
+        milks = new Array<>();
+
+        bt = new Texture("gameAssets/TheBigMilk.png");
+
+        milkTimer = 99.9f;
+
+        notPaused = false;
+        start = false;
+        pauseScreen = new Texture("gameAssets/Pause screen.png");
+
+        lifeCount = new Lives();
+        lifeCount.setSize(15, 10);
+        lifeCount.setPosition(65, 40);
     }
 
     @Override
@@ -38,7 +83,9 @@ public class GameScreen implements Screen {
         // Draw your screen here. "delta" is the time since last render in seconds.
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         draw(delta);
-        logic(delta);
+        if(notPaused){
+            logic(delta);
+        }
         input(delta);
     }
     public void draw(float delta){
@@ -52,13 +99,99 @@ public class GameScreen implements Screen {
 
         batch.draw(BG,0,0, worldWidth, worldHeight);
 
+        cow.draw(batch);
+        theButcher.draw(batch);
+
+        for (int i = 0; i < milks.size; i ++){
+            Milk bilk = milks.get(i);
+            bilk.draw(batch);
+            bilk.upperBottle.draw(batch);
+        }
+
+        lifeCount.setLives(cow.getHP());
+        lifeCount.draw(batch);
+
+        if (!notPaused && start){
+            batch.draw(pauseScreen,0,0, worldWidth, worldHeight);
+        }
         batch.end();
     }
     public void logic(float delta){
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+        if(cow.getY() > 4) {
+            cow.fall();
+            cow.translateY((float) cow.getGrav());
+        }
+        cow.setY(MathUtils.clamp(cow.getY(), 4, worldHeight - cow.getHeight()));
+
+        if(theButcher.getY() > 4) {
+            theButcher.fall();
+            theButcher.translateY((float) theButcher.getGrav());
+        }
+        theButcher.setY(MathUtils.clamp(theButcher.getY(), 4, worldHeight - theButcher.getHeight()));
+
+        if (theButcher.getY() + 3 < cow.getY()){
+            theButcher.jump();
+            theButcher.translateY((float) theButcher.getGrav());
+        }
+        for (int i = 0; i < milks.size; i ++){
+            Milk bilk = milks.get(i);
+            bilk.translateX( -0.2f);
+            bilk.updateUpper();
+            if (bilk.detectRectangle(cow.Hurtbox)){
+                System.out.println("owie");
+                cow.makeSound(2, volume);
+                cow.damageCow(1);
+                milks.removeIndex(i);
+            }
+            if (bilk.getX() < -1 * (bilk.getWidth())){
+                milks.removeIndex(i);
+            }
+        }
+
+        milkTimer += delta;
+
+        if (milkTimer >= 3){
+            createMilk();
+            milkTimer = 0;
+        }
+
+        if (cow.getHP() <= 0){
+            dead = true;
+        }
+
 
     }
     public void input(float delta){
+        boolean jumped = Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT);
 
+        if (jumped){
+            cow.jump();
+            cow.translateY((float) cow.getGrav());
+            cow.makeSound(3, volume);
+
+            notPaused = true;
+            start = true;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && start){
+            notPaused = !notPaused;
+        }
+    }
+
+    private void createMilk(){
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+
+        float width = 10;
+        float height = (float) (Math.random() * 16) + 15;
+        Milk bottle = new Milk(height, width, bt, worldHeight);
+        bottle.setY(4);
+        bottle.setX(worldWidth);
+        bottle.skin(mode);
+
+        milks.add(bottle);
     }
 
     @Override

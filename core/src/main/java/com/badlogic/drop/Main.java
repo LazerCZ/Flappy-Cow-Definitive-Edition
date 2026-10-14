@@ -6,10 +6,12 @@ import com.badlogic.gdx.Game;
 public class Main extends Game {
     FirstScreen fs;
     GameScreen gs;
+    OverScreen os;
     @Override
     public void create() {
         fs = new FirstScreen();
         gs = new GameScreen();
+        os = new OverScreen();
 
         setScreen(fs);
     }
@@ -18,9 +20,24 @@ public class Main extends Game {
     public void render() {
         super.render();
         if (fs.switchScreen){
-            setScreen(gs);
             gs.mode = fs.mode;
             gs.volume = fs.volume;
+            setScreen(gs);
+            fs.switchScreen = false;
+        }
+        if (gs.dead){
+            gs.dead = false;
+            os.volume = gs.volume;
+            os.mode = gs.mode;
+            setScreen(os);
+        }
+        if (os.goScreen == 1){
+            os.goScreen = 0;
+            setScreen(fs);
+        }
+        if (os.goScreen == 2){
+            os.goScreen = 0;
+            setScreen(gs);
         }
     }
 }

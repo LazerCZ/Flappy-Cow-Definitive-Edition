@@ -4,19 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Cow extends Sprite {
     private int lives;
     private double speed;
-    private double jumpPower;
+    private final double jumpPower;
     private double gravity;
-    private double gravMod;
+    private final double gravMod;
+    private final double tVelocity;
+    public Rectangle Hurtbox;
 
-    public Cow(Texture asset, double baseSpeed, double JP, double gravMod){
+    public Cow(Texture asset, double baseSpeed, double JP, double gravMod, double tVelocity, Rectangle hurtbox){
         super(asset);
         this.speed = baseSpeed;
         this.jumpPower = JP;
         this.gravMod = gravMod;
+        this.tVelocity = tVelocity;
+        this.Hurtbox = hurtbox;
+        this.lives = 3;
     }
 
     public double getSpeed(){
@@ -51,13 +57,31 @@ public class Cow extends Sprite {
                 break;
         }
     }
-    public void makeSound(){
+    public void makeSound(int Sound,float volume){
         Sound moo = Gdx.audio.newSound(Gdx.files.internal("gameAssets/cow3.mp3"));
-        moo.play();
-    }
-    public void updatePos(){
-        translateY((float) gravity);
+        Sound hurt = Gdx.audio.newSound(Gdx.files.internal("gameAssets/cowhurt3.mp3"));
+        Sound jump = Gdx.audio.newSound(Gdx.files.internal("gameAssets/jump.mp3"));
+        switch (Sound){
+            case 2:
+                hurt.play(volume);
+                break;
+            case 3:
+                jump.play(volume);
+                break;
+            default:
+                moo.play(volume);
+                break;
+        }
 
-        gravity--;
+
+    }
+    public void fall(){
+        if (gravity > tVelocity) {
+            gravity -= gravMod;
+        }
+        Hurtbox.setPosition(getX(), getY());
+    }
+    public double getGrav(){
+        return gravity;
     }
 }
