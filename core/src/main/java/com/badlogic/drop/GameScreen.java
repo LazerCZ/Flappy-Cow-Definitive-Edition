@@ -35,6 +35,10 @@ public class GameScreen implements Screen {
     Array<Milk> milks;
     float milkTimer;
 
+    Array<Cheese> cheeses;
+    float cheeseTimer;
+    Texture cheeseT;
+
     Texture bText;
     Butcher theButcher;
 
@@ -50,7 +54,7 @@ public class GameScreen implements Screen {
         BG = new Texture("gameAssets/4622732.png");
 
         cowText = new Texture("gameAssets/Untitled Drawing.png");
-        cow = new Cow(cowText, 6.0, 1, 0.1, -2, new Rectangle());
+        cow = new Cow(cowText, 0.2, 1, 0.1, -2, new Rectangle());
         cow.setSize(7,5);
         cow.setX(15);
         cow.setY(25);
@@ -68,6 +72,10 @@ public class GameScreen implements Screen {
         bt = new Texture("gameAssets/TheBigMilk.png");
 
         milkTimer = 99.9f;
+
+        cheeses = new Array<>();
+        cheeseTimer = 0.0f;
+        cheeseT = new Texture("gameAssets/DaCheese.png");
 
         notPaused = false;
         start = false;
@@ -107,6 +115,10 @@ public class GameScreen implements Screen {
             bilk.draw(batch);
             bilk.upperBottle.draw(batch);
         }
+        for(int i = 0; i < cheeses.size; i++){
+            Cheese c = cheeses.get(i);
+            c.draw(batch);
+        }
 
         lifeCount.setLives(cow.getHP());
         lifeCount.draw(batch);
@@ -137,7 +149,7 @@ public class GameScreen implements Screen {
         }
         for (int i = 0; i < milks.size; i ++){
             Milk bilk = milks.get(i);
-            bilk.translateX( -0.2f);
+            bilk.translateX( (float) (-1 * cow.getSpeed()));
             bilk.updateUpper();
             if (bilk.detectRectangle(cow.Hurtbox)){
                 System.out.println("owie");
@@ -147,6 +159,17 @@ public class GameScreen implements Screen {
             }
             if (bilk.getX() < -1 * (bilk.getWidth())){
                 milks.removeIndex(i);
+            }
+        }
+
+        for(int i = 0; i < cheeses.size; i++){
+            Cheese c = cheeses.get(i);
+            c.translateX(-0.5f);
+            c.setY(cow.getY());
+            if(c.detectRectangle(cow.Hurtbox)){
+                cow.makeSound(1, volume);
+                cow.changeSpeed(0.1);
+                cheeses.removeIndex(i);
             }
         }
 
@@ -161,6 +184,12 @@ public class GameScreen implements Screen {
             dead = true;
         }
 
+        cheeseTimer += delta;
+
+        if (cheeseTimer >= 10){
+            createCheese();
+            cheeseTimer = 0;
+        }
 
     }
     public void input(float delta){
@@ -192,6 +221,15 @@ public class GameScreen implements Screen {
         bottle.skin(mode);
 
         milks.add(bottle);
+    }
+    private void createCheese(){
+        float worldWidth = viewport.getWorldWidth();
+
+        float width = 10;
+        Cheese bottle = new Cheese(cheeseT, width);
+        bottle.setX(worldWidth);
+
+        cheeses.add(bottle);
     }
 
     @Override
