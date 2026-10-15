@@ -51,6 +51,11 @@ public class GameScreen implements Screen {
 
     int allOfIt = 999999999;
     float bossThing;
+    boolean isBoss;
+
+    Array<EvilMilk> bossMilks;
+    float bossMilkTimer;
+    Texture bossMilkTexture;
 
     @Override
     public void show() {
@@ -100,6 +105,11 @@ public class GameScreen implements Screen {
         Boss.setX(worldWidth);
 
         bossThing = 0;
+        isBoss = false;
+
+        bossMilks = new Array<>();
+        bossMilkTimer = 0.0f;
+        bossMilkTexture = new Texture("gameAssets/EvilMilk.png");
 
         sleepy = false;
         event = false;
@@ -140,6 +150,10 @@ public class GameScreen implements Screen {
         for(int i = 0; i < cheeses.size; i++){
             Cheese c = cheeses.get(i);
             c.draw(batch);
+        }
+        for (int i = 0; i < bossMilks.size; i ++){
+            EvilMilk bilk = bossMilks.get(i);
+            bilk.draw(batch);
         }
 
 
@@ -224,6 +238,15 @@ public class GameScreen implements Screen {
             Boss.translateX(((worldWidth - Boss.getWidth()) - Boss.getX()) / 100);
             Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
             event = true;
+            isBoss = true;
+        }
+
+        if(isBoss){
+            bossMilkTimer += delta;
+        }
+        if(bossMilkTimer > 3){
+            createEvilMilk(cow.getY());
+            bossMilkTimer = 0.0f;
         }
 
 
@@ -257,6 +280,14 @@ public class GameScreen implements Screen {
         bottle.skin(mode);
 
         milks.add(bottle);
+    }
+    private void createEvilMilk(float yPos){
+        float worldWidth = viewport.getWorldWidth();
+        EvilMilk bottle = new EvilMilk(bossMilkTexture);
+        bottle.setY(yPos);
+        bottle.setX(worldWidth);
+
+        bossMilks.add(bottle);
     }
     private void createCheese(){
         float worldWidth = viewport.getWorldWidth();
