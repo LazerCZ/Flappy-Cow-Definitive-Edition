@@ -24,6 +24,7 @@ public class GameScreen implements Screen {
     boolean dead = false;
 
     boolean sleepy;
+    boolean event;
 
     Texture BG;
     Texture pauseScreen;
@@ -101,6 +102,7 @@ public class GameScreen implements Screen {
         bossThing = 0;
 
         sleepy = false;
+        event = false;
     }
 
     @Override
@@ -198,10 +200,11 @@ public class GameScreen implements Screen {
             viewport.setScreenSize(viewport.getScreenWidth(), (int) Math.round((Math.sin(bossThing) + 1) * 500));
             viewport.setScreenPosition(viewport.getScreenX(), (int) Math.round((Math.sin(-bossThing) + 1) * 250));
         }
+        if (!event) {
+            milkTimer += delta;
+        }
 
-        milkTimer += delta;
-
-        if (milkTimer >= 7 - mode - ((cow.getSpeed() - 0.1) * 10) / (cow.getSpeed() * 2)){
+        if (milkTimer >= 7 - mode - ((cow.getSpeed() - 0.1) * 10) / (cow.getSpeed() * 2) && !event){
             createMilk();
             milkTimer = 0;
         }
@@ -220,6 +223,7 @@ public class GameScreen implements Screen {
         if (bossThing >= 5) {
             Boss.translateX(((worldWidth - Boss.getWidth()) - Boss.getX()) / 100);
             Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
+            event = true;
         }
 
 
