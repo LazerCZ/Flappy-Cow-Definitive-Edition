@@ -156,10 +156,6 @@ public class FirstScreen implements Screen {
                 mode = 0;
             }
             switch (mode){
-                case 0:
-                    modeButton.setTexture(m1);
-                    System.out.println("Classic Mode");
-                    break;
                 case 1:
                     modeButton.setTexture(m2);
                     System.out.println("Chocolate Mode");

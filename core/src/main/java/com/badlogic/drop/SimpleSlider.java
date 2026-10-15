@@ -41,7 +41,7 @@ public class SimpleSlider extends SimpleButton {
     boolean canMoo = false;
 
     public boolean isPressed(Vector2 mousePos){
-
+        setBounds();
         if (mousePos.x > this.getButtonPos().x && mousePos.x < this.getButtonPos2().x && mousePos.y > this.getButtonPos().y && mousePos.y < this.getButtonPos2().y){
             pressing = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
             canMoo = true;

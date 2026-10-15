@@ -23,9 +23,13 @@ public class GameScreen implements Screen {
     boolean start;
     boolean dead = false;
 
+    boolean sleepy;
+
     Texture BG;
     Texture pauseScreen;
 
+    Texture rb;
+    RoaringButcher Boss;
 
     Texture cowText;
     Cow cow;
@@ -43,6 +47,9 @@ public class GameScreen implements Screen {
     Butcher theButcher;
 
     Lives lifeCount;
+
+    int allOfIt = 999999999;
+    float bossThing;
 
     @Override
     public void show() {
@@ -84,6 +91,16 @@ public class GameScreen implements Screen {
         lifeCount = new Lives();
         lifeCount.setSize(15, 10);
         lifeCount.setPosition(65, 40);
+
+        rb = new Texture("gameAssets/RoaringButcher.png");
+        Boss = new RoaringButcher(rb, allOfIt + 1);
+        Boss.setSize(30,25);
+        Boss.setCenter(40, 25);
+        Boss.setX(worldWidth);
+
+        bossThing = 0;
+
+        sleepy = false;
     }
 
     @Override
@@ -95,6 +112,7 @@ public class GameScreen implements Screen {
             logic(delta);
         }
         input(delta);
+
     }
     public void draw(float delta){
         ScreenUtils.clear(Color.BLACK);
@@ -110,6 +128,8 @@ public class GameScreen implements Screen {
         cow.draw(batch);
         theButcher.draw(batch);
 
+        Boss.draw(batch);
+
         for (int i = 0; i < milks.size; i ++){
             Milk bilk = milks.get(i);
             bilk.draw(batch);
@@ -119,6 +139,8 @@ public class GameScreen implements Screen {
             Cheese c = cheeses.get(i);
             c.draw(batch);
         }
+
+
 
         lifeCount.setLives(cow.getHP());
         lifeCount.draw(batch);
@@ -172,10 +194,14 @@ public class GameScreen implements Screen {
                 cheeses.removeIndex(i);
             }
         }
+        if (sleepy) {
+            viewport.setScreenSize(viewport.getScreenWidth(), (int) Math.round((Math.sin(bossThing) + 1) * 500));
+            viewport.setScreenPosition(viewport.getScreenX(), (int) Math.round((Math.sin(-bossThing) + 1) * 250));
+        }
 
         milkTimer += delta;
 
-        if (milkTimer >= 3){
+        if (milkTimer >= 7 - mode - ((cow.getSpeed() - 0.1) * 10) / (cow.getSpeed() * 2)){
             createMilk();
             milkTimer = 0;
         }
@@ -190,6 +216,12 @@ public class GameScreen implements Screen {
             createCheese();
             cheeseTimer = 0;
         }
+        bossThing += delta;
+        if (bossThing >= 5) {
+            Boss.translateX(((worldWidth - Boss.getWidth()) - Boss.getX()) / 100);
+            Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
+        }
+
 
     }
     public void input(float delta){
@@ -225,7 +257,7 @@ public class GameScreen implements Screen {
     private void createCheese(){
         float worldWidth = viewport.getWorldWidth();
 
-        float width = 10;
+        float width = 5;
         Cheese bottle = new Cheese(cheeseT, width);
         bottle.setX(worldWidth);
 
