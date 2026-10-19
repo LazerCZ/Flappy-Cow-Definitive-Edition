@@ -11,15 +11,15 @@ public class EvilMilk extends Sprite {
 
     public EvilMilk(Texture asset){
         super(asset);
-        setSize(17, 10);
-        accel = -4.0f;
+        setSize(17, 6);
+        accel = 2.0f;
     }
     public boolean detectRectangle(Rectangle rect){
         milkHB = new Hitbox(getX(), getY() + getHeight() / 4, getWidth(), getHeight() / 2, true);
         return milkHB.overlaps(rect);
     }
     public void attack(){
-        accel += 0.5f;
+        accel -= 0.1f;
         translateX(accel);
     }
 }

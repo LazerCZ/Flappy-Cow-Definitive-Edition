@@ -241,12 +241,26 @@ public class GameScreen implements Screen {
             isBoss = true;
         }
 
-        if(isBoss){
-            bossMilkTimer += delta;
+        if(isBoss && (milks.size < 1)){
+            bossMilkTimer += delta + 0.04f * mode;
         }
         if(bossMilkTimer > 3){
             createEvilMilk(cow.getY());
             bossMilkTimer = 0.0f;
+        }
+
+        for (int i = 0; i < bossMilks.size; i ++){
+            EvilMilk bilk = bossMilks.get(i);
+            bilk.attack();
+            if (bilk.detectRectangle(cow.Hurtbox)){
+                System.out.println("owie");
+                cow.makeSound(2, volume);
+                cow.damageCow(1);
+                bossMilks.removeIndex(i);
+            }
+            if (bilk.getX() < -1 * (bilk.getWidth())){
+                bossMilks.removeIndex(i);
+            }
         }
 
 
@@ -285,7 +299,7 @@ public class GameScreen implements Screen {
         float worldWidth = viewport.getWorldWidth();
         EvilMilk bottle = new EvilMilk(bossMilkTexture);
         bottle.setY(yPos);
-        bottle.setX(worldWidth);
+        bottle.setX(worldWidth - bottle.getWidth());
 
         bossMilks.add(bottle);
     }
