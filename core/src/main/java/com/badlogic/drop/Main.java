@@ -7,11 +7,13 @@ public class Main extends Game {
     FirstScreen fs;
     GameScreen gs;
     OverScreen os;
+    SwoonScreen ss;
     @Override
     public void create() {
         fs = new FirstScreen();
         gs = new GameScreen();
         os = new OverScreen();
+        ss = new SwoonScreen();
 
         setScreen(fs);
     }
@@ -27,9 +29,17 @@ public class Main extends Game {
         }
         if (gs.dead){
             gs.dead = false;
-            os.volume = gs.volume;
-            os.mode = gs.mode;
-            setScreen(os);
+            if (gs.isBoss){
+                ss.volume = gs.volume;
+                ss.mode = gs.mode;
+                ss.swoonY = gs.cow.getY();
+                setScreen(ss);
+            }
+            else {
+                os.volume = gs.volume;
+                os.mode = gs.mode;
+                setScreen(os);
+            }
         }
         if (os.goScreen == 1){
             os.goScreen = 0;
@@ -38,6 +48,10 @@ public class Main extends Game {
         if (os.goScreen == 2){
             os.goScreen = 0;
             setScreen(gs);
+        }
+        if (ss.timer >= 3){
+            setScreen(os);
+            ss.timer = 0;
         }
     }
 }

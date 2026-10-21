@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class EvilMilk extends Sprite {
     Hitbox milkHB;
     private float accel;
+    public float angle = 0.0f;
 
     public EvilMilk(Texture asset){
         super(asset);
@@ -21,5 +22,6 @@ public class EvilMilk extends Sprite {
     public void attack(){
         accel -= 0.1f;
         translateX(accel);
+
     }
 }

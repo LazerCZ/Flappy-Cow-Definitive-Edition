@@ -32,6 +32,7 @@ public class Milk extends Sprite {
         Texture s1 = new Texture("gameAssets/TheBigMilk.png");
         Texture s2 = new Texture("gameAssets/ChocoMilk.png");
         Texture s3 = new Texture("gameAssets/StrawMilk.png");
+        Texture s4 = new Texture("gameAssets/EvilMilk2.png");
         switch (value){
             case 1:
                 this.setTexture(s2);
@@ -40,6 +41,10 @@ public class Milk extends Sprite {
             case 2:
                 this.setTexture(s3);
                 upperBottle.setTexture(s3);
+                break;
+            case 3:
+                this.setTexture(s4);
+                upperBottle.setTexture(s4);
                 break;
             default:
                 this.setTexture(s1);

@@ -52,10 +52,14 @@ public class GameScreen implements Screen {
     int allOfIt = 999999999;
     float bossThing;
     boolean isBoss;
+    int evilMilkCycle;
 
     Array<EvilMilk> bossMilks;
     float bossMilkTimer;
     Texture bossMilkTexture;
+
+    Array<EvilMilk> bossMilks2;
+    Texture bossMilkTexture2;
 
     @Override
     public void show() {
@@ -67,7 +71,7 @@ public class GameScreen implements Screen {
         BG = new Texture("gameAssets/4622732.png");
 
         cowText = new Texture("gameAssets/Untitled Drawing.png");
-        cow = new Cow(cowText, 0.2, 1, 0.1, -2, new Rectangle());
+        cow = new Cow(cowText, 1.6, 1, 0.1, -2, new Rectangle()); // set speed to 0.2 before finishing
         cow.setSize(7,5);
         cow.setX(15);
         cow.setY(25);
@@ -103,6 +107,7 @@ public class GameScreen implements Screen {
         Boss.setSize(30,25);
         Boss.setCenter(40, 25);
         Boss.setX(worldWidth);
+        Boss.chooseAttack();
 
         bossThing = 0;
         isBoss = false;
@@ -110,6 +115,10 @@ public class GameScreen implements Screen {
         bossMilks = new Array<>();
         bossMilkTimer = 0.0f;
         bossMilkTexture = new Texture("gameAssets/EvilMilk.png");
+        evilMilkCycle = 0;
+
+        bossMilks2 = new Array<>();
+        bossMilkTexture2 = new Texture("gameAssets/EvilMilk.png");
 
         sleepy = false;
         event = false;
@@ -241,14 +250,32 @@ public class GameScreen implements Screen {
             isBoss = true;
         }
 
-        if(isBoss && (milks.size < 1)){
-            bossMilkTimer += delta + 0.04f * mode;
+        //Boss attack 1
+        if(isBoss && (milks.size < 1) && Boss.getAttackNum() == 1){
+            bossMilkTimer += delta + 0.01f * mode;
         }
-        if(bossMilkTimer > 3){
+        if(bossMilkTimer >= 2 && evilMilkCycle == 0 && Boss.getAttackNum() == 1){
             createEvilMilk(cow.getY());
-            bossMilkTimer = 0.0f;
+            evilMilkCycle ++;
         }
-
+        if(bossMilkTimer > 4 && evilMilkCycle == 1 && Boss.getAttackNum() == 1){
+            createEvilMilk(cow.getY() + 10);
+            createEvilMilk(cow.getY() - 10);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer > 6 && evilMilkCycle == 2 && Boss.getAttackNum() == 1){
+            createEvilMilk(worldHeight - 6);
+            createEvilMilk(4);
+            createEvilMilk((worldHeight - 4) / 2);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer > 7.5 && evilMilkCycle == 3 && Boss.getAttackNum() == 1){
+            createEvilMilk((worldHeight - 4) * ((float) 2 / 3));
+            createEvilMilk((worldHeight - 4) / 3);
+            evilMilkCycle = 0;
+            bossMilkTimer = 0.0f;
+            Boss.chooseAttack();
+        }
         for (int i = 0; i < bossMilks.size; i ++){
             EvilMilk bilk = bossMilks.get(i);
             bilk.attack();
@@ -262,7 +289,30 @@ public class GameScreen implements Screen {
                 bossMilks.removeIndex(i);
             }
         }
-
+        //Boss attack 2
+        float convertTime = 0;
+        if(isBoss && ((milks.size < 1) || evilMilkCycle > 0) && Boss.getAttackNum() == 2){
+            bossMilkTimer += delta;
+            convertTime = (float) Math.round(bossMilkTimer * 100) / 100;
+        }
+        if(bossMilkTimer >= 2 && evilMilkCycle < 5 && convertTime % 0.25 == 0 && Boss.getAttackNum() == 2){
+            createMilkBoss(25 - evilMilkCycle * 3);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 3.5 && evilMilkCycle == 5 && Boss.getAttackNum() == 2){
+            createEvilMilk(14);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 5 - (float) mode / 2 && evilMilkCycle < 11 && convertTime % 0.25 == 0 && Boss.getAttackNum() == 2){
+            createMilkBoss(15 + (evilMilkCycle - 6) * 3);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6.5 - (float) mode / 2 && evilMilkCycle == 11 && Boss.getAttackNum() == 2){
+            createEvilMilk(34);
+            evilMilkCycle = 0;
+            bossMilkTimer = 0.0f;
+            Boss.chooseAttack();
+        }
 
     }
     public void input(float delta){
@@ -297,11 +347,25 @@ public class GameScreen implements Screen {
     }
     private void createEvilMilk(float yPos){
         float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
         EvilMilk bottle = new EvilMilk(bossMilkTexture);
         bottle.setY(yPos);
         bottle.setX(worldWidth - bottle.getWidth());
+        bottle.setY(MathUtils.clamp(bottle.getY(), 4, worldHeight - bottle.getHeight()));
 
         bossMilks.add(bottle);
+    }
+    private void createMilkBoss(float yPos){
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+
+        float width = 10;
+        Milk bottle = new Milk(yPos , width, bt, worldHeight);
+        bottle.setY(4);
+        bottle.setX(worldWidth);
+        bottle.skin(3);
+
+        milks.add(bottle);
     }
     private void createCheese(){
         float worldWidth = viewport.getWorldWidth();
