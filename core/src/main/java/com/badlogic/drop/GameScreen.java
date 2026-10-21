@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import org.w3c.dom.Text;
 
 public class GameScreen implements Screen {
     SpriteBatch batch;
@@ -58,7 +57,7 @@ public class GameScreen implements Screen {
     float bossMilkTimer;
     Texture bossMilkTexture;
 
-    Array<EvilMilk> bossMilks2;
+    Array<EvilMilkStars> bossMilks2;
     Texture bossMilkTexture2;
 
     @Override
@@ -162,6 +161,10 @@ public class GameScreen implements Screen {
         }
         for (int i = 0; i < bossMilks.size; i ++){
             EvilMilk bilk = bossMilks.get(i);
+            bilk.draw(batch);
+        }
+        for (int i = 0; i < bossMilks2.size; i ++){
+            EvilMilkStars bilk = bossMilks2.get(i);
             bilk.draw(batch);
         }
 
@@ -289,6 +292,7 @@ public class GameScreen implements Screen {
                 bossMilks.removeIndex(i);
             }
         }
+
         //Boss attack 2
         float convertTime = 0;
         if(isBoss && ((milks.size < 1) || evilMilkCycle > 0) && Boss.getAttackNum() == 2){
@@ -312,6 +316,37 @@ public class GameScreen implements Screen {
             evilMilkCycle = 0;
             bossMilkTimer = 0.0f;
             Boss.chooseAttack();
+        }
+        //Boss attack 3
+        if(isBoss && ((milks.size < 1) || evilMilkCycle > 0) && Boss.getAttackNum() == 3){
+            bossMilkTimer += delta;
+            convertTime = (float) Math.round(bossMilkTimer * 100) / 100;
+        }
+        if(bossMilkTimer >= 2 - (float) mode / 2 && evilMilkCycle == 0 && Boss.getAttackNum() == 3){
+            createMilkStar(cow.getY(), -90);
+            createMilkStar(cow.getY(), -135);
+            evilMilkCycle = 0;
+            bossMilkTimer = 0.0f;
+            Boss.chooseAttack();
+        }
+
+        for (int i = 0; i < bossMilks2.size; i ++){
+            EvilMilkStars bilk = bossMilks2.get(i);
+            if (bilk.getX() < 30 || !bilk.starBool()){
+                bilk.attack();
+            }
+            else {
+                bilk.attack2();
+            }
+            if (bilk.detectRectangle(cow.Hurtbox)){
+                System.out.println("owie");
+                cow.makeSound(2, volume);
+                cow.damageCow(1);
+                bossMilks2.removeIndex(i);
+            }
+            if (bilk.getX() < -1 * (bilk.getWidth())){
+                bossMilks2.removeIndex(i);
+            }
         }
 
     }
@@ -366,6 +401,17 @@ public class GameScreen implements Screen {
         bottle.skin(3);
 
         milks.add(bottle);
+    }
+    private void createMilkStar(float yPos, float ang){
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+        EvilMilkStars bottle = new EvilMilkStars(bossMilkTexture);
+        bottle.setY(yPos);
+        bottle.setX(worldWidth - bottle.getWidth());
+        bottle.setY(MathUtils.clamp(bottle.getY(), 4, worldHeight - bottle.getHeight()));
+        bottle.setAngle(ang);
+
+        bossMilks2.add(bottle);
     }
     private void createCheese(){
         float worldWidth = viewport.getWorldWidth();
