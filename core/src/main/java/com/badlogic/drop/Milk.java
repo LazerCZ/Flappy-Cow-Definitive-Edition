@@ -9,13 +9,15 @@ public class Milk extends Sprite {
     Sprite upperBottle;
     Hitbox milkHB;
     float worldHeight;
+    float speed;
 
-    public Milk(float height, float width, Texture asset, float worldHeight){
+    public Milk(float height, float width, Texture asset, float worldHeight, float speed){
         super(asset);
         setSize(width, height);
         upperBottle = new Sprite(asset);
         upperBottle.setSize(width,  -1 * (worldHeight - height - 15));
         this.worldHeight = worldHeight;
+        this.speed = speed;
     }
     public boolean detectRectangle(Rectangle rect){
         milkHB = new Hitbox(getX() + getWidth() / 4, getY(), getWidth() / 2, getHeight() - 5, true);

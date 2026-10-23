@@ -18,13 +18,13 @@ public class EvilMilkStars extends Sprite {
         goAgain = true;
     }
     public boolean detectRectangle(Rectangle rect){
-        milkHB = new Hitbox(getX(), getY() + getHeight() / 4, getWidth(), getHeight() / 2, true);
+        milkHB = new Hitbox(getX(), getY() + getHeight() / 6, getWidth(), getHeight() / 3, true);
         return milkHB.overlaps(rect);
     }
     public void attack(){
         if (goAgain){
             goAgain = false;
-            accel = -2.0f;
+            accel = -2.3f;
         }
 
         accel += 0.1f;

@@ -247,7 +247,7 @@ public class GameScreen implements Screen {
             cheeseTimer = 0;
         }
         bossThing += delta;
-        if (bossThing >= 5) {
+        if (bossThing >= 1) {
             Boss.translateX(((worldWidth - Boss.getWidth()) - Boss.getX()) / 100);
             Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
             event = true;
@@ -380,7 +380,21 @@ public class GameScreen implements Screen {
             bossMilkTimer = 0;
             Boss.chooseAttack();
         }
-
+        //boss attack 4
+        if(isBoss && ((milks.size < 1) || evilMilkCycle > 0) && Boss.getAttackNum() == 4){
+            bossMilkTimer += delta;
+            convertTime = (float) Math.round(bossMilkTimer * 100) / 100;
+        }
+        if(bossMilkTimer >= 2 && evilMilkCycle <= 5 + mode * 2 && Boss.getAttackNum() == 4){
+            createMilkStar((float) (cow.getY() + (-1 + Math.random() * 2) * 20), 90);
+            evilMilkCycle ++;
+            bossMilkTimer = (float) (1.5f + mode * 0.08);
+        }
+        if(bossMilkTimer >= 1 && evilMilkCycle == 6 + mode * 2 && Boss.getAttackNum() == 4){
+            evilMilkCycle = 0;
+            bossMilkTimer = 0;
+            Boss.chooseAttack();
+        }
 
 
         for (int i = 0; i < bossMilks2.size; i ++){
@@ -426,7 +440,7 @@ public class GameScreen implements Screen {
 
         float width = 10;
         float height = (float) (Math.random() * 16) + 15;
-        Milk bottle = new Milk(height, width, bt, worldHeight);
+        Milk bottle = new Milk(height, width, bt, worldHeight, (float) cow.getSpeed());
         bottle.setY(4);
         bottle.setX(worldWidth);
         bottle.skin(mode);
@@ -448,7 +462,7 @@ public class GameScreen implements Screen {
         float worldHeight = viewport.getWorldHeight();
 
         float width = 10;
-        Milk bottle = new Milk(yPos , width, bt, worldHeight);
+        Milk bottle = new Milk(yPos , width, bt, worldHeight, (float) cow.getSpeed());
         bottle.setY(4);
         bottle.setX(worldWidth);
         bottle.skin(3);
