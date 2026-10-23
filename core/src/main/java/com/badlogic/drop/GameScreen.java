@@ -231,7 +231,7 @@ public class GameScreen implements Screen {
             milkTimer += delta;
         }
 
-        if (milkTimer >= 7 - mode - ((cow.getSpeed() - 0.1) * 10) / (cow.getSpeed() * 2) && !event){
+        if (milkTimer >= 7 - mode * 0.7 - ((cow.getSpeed() - 0.1) * 20) / (cow.getSpeed() * 2) && !event){
             createMilk();
             milkTimer = 0;
         }
