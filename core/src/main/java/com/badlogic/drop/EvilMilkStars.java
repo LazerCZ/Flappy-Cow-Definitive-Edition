@@ -13,7 +13,7 @@ public class EvilMilkStars extends Sprite {
 
     public EvilMilkStars(Texture asset){
         super(asset);
-        setSize(17, 6);
+        setSize(9, 3);
         accel = -2.0f;
         goAgain = true;
     }
@@ -29,14 +29,14 @@ public class EvilMilkStars extends Sprite {
 
         accel += 0.1f;
         setOrigin(getWidth() / 2, getHeight() / 2);
-        setRotation(angle + 90);
+        setRotation(-angle + 270);
         translateX((float) (Math.sin(MathUtils.degreesToRadians * angle) * accel));
         translateY((float) (Math.cos(MathUtils.degreesToRadians * angle) * accel));
     }
     public void attack2(){
         accel += 0.1f;
         setOrigin(getWidth() / 2, getHeight() / 2);
-        setRotation(angle + 90);
+        setRotation(-angle + 270);
         translateX(-accel);
     }
     public boolean starBool(){

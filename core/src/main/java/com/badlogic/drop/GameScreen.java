@@ -220,6 +220,7 @@ public class GameScreen implements Screen {
                 cow.makeSound(1, volume);
                 cow.changeSpeed(0.1);
                 cheeses.removeIndex(i);
+                milkTimer = 0;
             }
         }
         if (sleepy) {
@@ -323,16 +324,68 @@ public class GameScreen implements Screen {
             convertTime = (float) Math.round(bossMilkTimer * 100) / 100;
         }
         if(bossMilkTimer >= 2 - (float) mode / 2 && evilMilkCycle == 0 && Boss.getAttackNum() == 3){
-            createMilkStar(cow.getY(), -90);
+            createMilkStar(cow.getY(), -45);
             createMilkStar(cow.getY(), -135);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 2.5 - (float) mode / 2 && evilMilkCycle == 1 && Boss.getAttackNum() == 3){
+            createEvilMilk(cow.getY());
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 4 - (float) mode / 2 && evilMilkCycle == 2 && Boss.getAttackNum() == 3){
+            createMilkStar(cow.getY(), -30);
+            createMilkStar(cow.getY(), -90);
+            createMilkStar(cow.getY(), -150);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6 - (float) mode / 2 && evilMilkCycle == 3 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -30);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6.15 - (float) mode / 2 && evilMilkCycle == 4 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -45);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6.3 - (float) mode / 2 && evilMilkCycle == 5 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -60);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6.45 - (float) mode / 2 && evilMilkCycle == 6 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -75);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 6.6 - (float) mode / 2 && evilMilkCycle == 7 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -90);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 7.6 - (float) mode / 2 && evilMilkCycle == 8 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -150);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 7.75 - (float) mode / 2 && evilMilkCycle == 9 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -135);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 7.9 - (float) mode / 2 && evilMilkCycle == 10 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -120);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 8.05 - (float) mode / 2 && evilMilkCycle == 11 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -105);
+            evilMilkCycle ++;
+        }
+        if(bossMilkTimer >= 8.2 - (float) mode / 2 && evilMilkCycle == 12 && Boss.getAttackNum() == 3){
+            createMilkStar(worldHeight / 2, -90);
             evilMilkCycle = 0;
-            bossMilkTimer = 0.0f;
+            bossMilkTimer = 0;
             Boss.chooseAttack();
         }
 
+
+
         for (int i = 0; i < bossMilks2.size; i ++){
             EvilMilkStars bilk = bossMilks2.get(i);
-            if (bilk.getX() < 30 || !bilk.starBool()){
+            if (bilk.getX() < 45 || !bilk.starBool()){
                 bilk.attack();
             }
             else {

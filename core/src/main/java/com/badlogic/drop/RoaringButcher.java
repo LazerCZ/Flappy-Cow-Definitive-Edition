@@ -24,14 +24,14 @@ public class RoaringButcher extends Sprite {
     }
 
     public void chooseAttack(){
-        attackNum = (int) Math.round(3 + (Math.random() * 0));
-        /*
+        attackNum = (int) Math.round(1 + (Math.random() * 2));
+        ///*
         if (attackNum == lastAttack){
             while (attackNum == lastAttack){
-                attackNum = (int) Math.round(1 + (Math.random() * 1));
+                attackNum = (int) Math.round(1 + (Math.random() * 2));
             }
         }
-        */
+        //*/
         lastAttack = attackNum;
 
     }

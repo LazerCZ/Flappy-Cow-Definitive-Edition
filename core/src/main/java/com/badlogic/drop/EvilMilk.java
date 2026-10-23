@@ -16,7 +16,7 @@ public class EvilMilk extends Sprite {
         accel = 2.0f;
     }
     public boolean detectRectangle(Rectangle rect){
-        milkHB = new Hitbox(getX(), getY() + getHeight() / 4, getWidth(), getHeight() / 2, true);
+        milkHB = new Hitbox(getX() + getWidth() / 8, getY() + getHeight() / 4, getWidth() / 4, getHeight() / 2, true);
         return milkHB.overlaps(rect);
     }
     public void attack(){
