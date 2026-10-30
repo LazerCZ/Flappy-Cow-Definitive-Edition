@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
         BG = new Texture("gameAssets/4622732.png");
 
         cowText = new Texture("gameAssets/Untitled Drawing.png");
-        cow = new Cow(cowText, 0.2, 1, 0.1, -2, new Rectangle());
+        cow = new Cow(cowText, 0.5, 1, 0.1, -2, new Rectangle());
         cow.setSize(7,5);
         cow.setX(15);
         cow.setY(25);
@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
         lifeCount.setPosition(65, 40);
 
         rb = new Texture("gameAssets/RoaringButcher.png");
-        Boss = new RoaringButcher(rb, 1);
+        Boss = new RoaringButcher(rb, 8);
         Boss.setSize(30,25);
         Boss.setCenter(40, 25);
         Boss.setX(worldWidth);
@@ -222,7 +222,7 @@ public class GameScreen implements Screen {
             c.setY(cow.getY());
             if(c.detectRectangle(cow.Hurtbox)){
                 cow.makeSound(1, volume);
-                cow.changeSpeed(0.1);
+                cow.changeSpeed(0.03);
                 cheeses.removeIndex(i);
                 milkTimer = 0;
                 score ++;
@@ -248,7 +248,7 @@ public class GameScreen implements Screen {
             dead = true;
         }
 
-        cow.damageCow(-3 + cow.getHP());  //invincibility
+        //cow.damageCow(-3 + cow.getHP());  //invincibility
 
         cheeseTimer += delta;
 
@@ -268,7 +268,8 @@ public class GameScreen implements Screen {
             Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
             event = false;
             isBoss = false;
-            Boss.takeDamage(-10);
+            Boss.takeDamage(-8);
+            cow.damageCow(3 - cow.getHP());
             bossThing = -2;
         }
         if (!isBoss){
