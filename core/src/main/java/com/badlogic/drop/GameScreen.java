@@ -53,6 +53,8 @@ public class GameScreen implements Screen {
     boolean isBoss;
     int evilMilkCycle;
 
+    int score;
+
     Array<EvilMilk> bossMilks;
     float bossMilkTimer;
     Texture bossMilkTexture;
@@ -70,7 +72,7 @@ public class GameScreen implements Screen {
         BG = new Texture("gameAssets/4622732.png");
 
         cowText = new Texture("gameAssets/Untitled Drawing.png");
-        cow = new Cow(cowText, 1.6, 1, 0.1, -2, new Rectangle()); // set speed to 0.2 before finishing
+        cow = new Cow(cowText, 0.2, 1, 0.1, -2, new Rectangle());
         cow.setSize(7,5);
         cow.setX(15);
         cow.setY(25);
@@ -87,6 +89,8 @@ public class GameScreen implements Screen {
 
         bt = new Texture("gameAssets/TheBigMilk.png");
 
+        score = 0;
+
         milkTimer = 99.9f;
 
         cheeses = new Array<>();
@@ -102,7 +106,7 @@ public class GameScreen implements Screen {
         lifeCount.setPosition(65, 40);
 
         rb = new Texture("gameAssets/RoaringButcher.png");
-        Boss = new RoaringButcher(rb, allOfIt + 1);
+        Boss = new RoaringButcher(rb, 1);
         Boss.setSize(30,25);
         Boss.setCenter(40, 25);
         Boss.setX(worldWidth);
@@ -199,7 +203,7 @@ public class GameScreen implements Screen {
         }
         for (int i = 0; i < milks.size; i ++){
             Milk bilk = milks.get(i);
-            bilk.translateX( (float) (-1 * cow.getSpeed()));
+            bilk.translateX(bilk.speed);
             bilk.updateUpper();
             if (bilk.detectRectangle(cow.Hurtbox)){
                 System.out.println("owie");
@@ -221,6 +225,10 @@ public class GameScreen implements Screen {
                 cow.changeSpeed(0.1);
                 cheeses.removeIndex(i);
                 milkTimer = 0;
+                score ++;
+                if (isBoss){
+                    Boss.takeDamage(1);
+                }
             }
         }
         if (sleepy) {
@@ -240,6 +248,8 @@ public class GameScreen implements Screen {
             dead = true;
         }
 
+        cow.damageCow(-3 + cow.getHP());  //invincibility
+
         cheeseTimer += delta;
 
         if (cheeseTimer >= 10){
@@ -247,11 +257,23 @@ public class GameScreen implements Screen {
             cheeseTimer = 0;
         }
         bossThing += delta;
-        if (bossThing >= 1) {
+        if (bossThing >= 120) {
             Boss.translateX(((worldWidth - Boss.getWidth()) - Boss.getX()) / 100);
             Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
             event = true;
             isBoss = true;
+        }
+        if (Boss.getHP() <= 0 && isBoss && evilMilkCycle == 0) {
+            Boss.translateX((worldWidth + Boss.getX()) / 100);
+            Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
+            event = false;
+            isBoss = false;
+            Boss.takeDamage(-10);
+            bossThing = -2;
+        }
+        if (!isBoss){
+            Boss.translateX((worldWidth - Boss.getX()) / 100);
+            Boss.setY(12.5f + (float) Math.sin(bossThing * 3) * 7);
         }
 
         //Boss attack 1
@@ -440,7 +462,7 @@ public class GameScreen implements Screen {
 
         float width = 10;
         float height = (float) (Math.random() * 16) + 15;
-        Milk bottle = new Milk(height, width, bt, worldHeight, (float) cow.getSpeed());
+        Milk bottle = new Milk(height, width, bt, worldHeight, (float) (-1 * cow.getSpeed()));
         bottle.setY(4);
         bottle.setX(worldWidth);
         bottle.skin(mode);
@@ -462,7 +484,7 @@ public class GameScreen implements Screen {
         float worldHeight = viewport.getWorldHeight();
 
         float width = 10;
-        Milk bottle = new Milk(yPos , width, bt, worldHeight, (float) cow.getSpeed());
+        Milk bottle = new Milk(yPos , width, bt, worldHeight, -1.6f);
         bottle.setY(4);
         bottle.setX(worldWidth);
         bottle.skin(3);
