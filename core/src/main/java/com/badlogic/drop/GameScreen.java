@@ -3,6 +3,7 @@ package com.badlogic.drop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -55,12 +56,16 @@ public class GameScreen implements Screen {
 
     int score;
 
+    Music music;
+
     Array<EvilMilk> bossMilks;
     float bossMilkTimer;
     Texture bossMilkTexture;
 
     Array<EvilMilkStars> bossMilks2;
     Texture bossMilkTexture2;
+
+    ScoreCounter counter;
 
     @Override
     public void show() {
@@ -125,6 +130,15 @@ public class GameScreen implements Screen {
 
         sleepy = false;
         event = false;
+
+        counter = new ScoreCounter(0, batch);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("gameAssets/The Agony Song [ ezmp3.mp3"));
+
+
+        music.setLooping(true);
+        music.setVolume(0.25f * volume);
+        music.play();
     }
 
     @Override
@@ -180,6 +194,7 @@ public class GameScreen implements Screen {
         if (!notPaused && start){
             batch.draw(pauseScreen,0,0, worldWidth, worldHeight);
         }
+        counter.drawScore(0, worldHeight - 6, 2, 3);
         batch.end();
     }
     public void logic(float delta){
@@ -225,7 +240,7 @@ public class GameScreen implements Screen {
                 cow.changeSpeed(0.03);
                 cheeses.removeIndex(i);
                 milkTimer = 0;
-                score ++;
+                counter.count ++;
                 if (isBoss){
                     Boss.takeDamage(1);
                 }

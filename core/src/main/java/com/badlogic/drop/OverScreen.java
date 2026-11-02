@@ -23,6 +23,9 @@ public class OverScreen implements Screen {
     Texture titleT;
     SimpleButton title;
 
+    int score = 0;
+    ScoreCounter counter;
+
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -41,6 +44,8 @@ public class OverScreen implements Screen {
         title.setSize(25, 15);
         title.setCenter(55, 15);
         title.setBounds();
+
+        counter = new ScoreCounter(score, batch);
     }
 
     @Override
@@ -65,6 +70,8 @@ public class OverScreen implements Screen {
 
         restart.draw(batch);
         title.draw(batch);
+
+        counter.drawScore(25, 20, 2, 3);
 
         batch.end();
     }

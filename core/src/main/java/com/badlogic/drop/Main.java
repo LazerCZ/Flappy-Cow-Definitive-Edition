@@ -38,6 +38,7 @@ public class Main extends Game {
             else {
                 os.volume = gs.volume;
                 os.mode = gs.mode;
+                os.score = gs.counter.count;
                 setScreen(os);
             }
         }
@@ -50,6 +51,9 @@ public class Main extends Game {
             setScreen(gs);
         }
         if (ss.timer >= 3){
+            os.volume = gs.volume;
+            os.mode = gs.mode;
+            os.score = gs.counter.count;
             setScreen(os);
             ss.timer = 0;
         }
